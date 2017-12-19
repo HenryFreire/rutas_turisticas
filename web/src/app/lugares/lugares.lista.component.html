@@ -1,0 +1,36 @@
+<agm-map [latitude]="lat" [longitude]="lng" [zoom]="13">
+  <agm-marker *ngFor="let lugar of lugares" [latitude]="lugar.lat" [longitude]="lugar.lng"></agm-marker>
+</agm-map>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>Lista de Lugares</h3>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-8">
+      <ul class="list-group">
+        <ng-container *ngFor="let lugar of lugares | paginate: { itemsPerPage: 5, currentPage: p } | filtroLugares: nombreFilter">
+          <li class="list-group-item"  >
+            <a > <h3>{{lugar.nombre}}</h3></a>
+            <br>
+            <small>Creado: {{lugar.createdAt | amLocale: 'es'| amTimeAgo}}</small>
+            <br>
+            <p [innerHTML]="lugar.descripcion "></p>
+            <p [innerHTML]="lugar.direccion "></p>
+            <a class="btn btn-default btn-sm" routerLink="/actualizar/{{lugar.id}}"><i class="glyphicon glyphicon-pencil"> Editar</i></a>
+            <a  class="btn btn-default btn-sm"><i class="glyphicon glyphicon-trash"> Eliminar</i></a>
+          </li>
+        </ng-container>
+      </ul>
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+    <div class="col-sm-4">
+      <h4 for="">Buscar un lugar</h4>
+      <input type="text" class="form-control" placeholder="Ingrese el nombre del lugar" [(ngModel)]='nombreFilter' >
+      <br>
+      <a href="/crear"  class="btn btn-primary " >Crear Lugar</a>
+    </div>
+  </div>
+</div>
