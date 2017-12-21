@@ -35,7 +35,9 @@
         console.log('error', error);
       },
       url: 'http://localhost:1337/Lugar/subir',
-      method: "POST"
+      method: "POST",
+      headers: {"Authorization": localStorage.getItem('token')},
+      clearForm: true
     };
     $('#btnLugares').on('click', function() {
       console.log('Enviado');

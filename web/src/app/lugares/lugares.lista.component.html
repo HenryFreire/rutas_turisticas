@@ -19,8 +19,8 @@
             <br>
             <p [innerHTML]="lugar.descripcion "></p>
             <p [innerHTML]="lugar.direccion "></p>
-            <a class="btn btn-default btn-sm" routerLink="/actualizar/{{lugar.id}}"><i class="glyphicon glyphicon-pencil"> Editar</i></a>
-            <a  class="btn btn-default btn-sm"><i class="glyphicon glyphicon-trash"> Eliminar</i></a>
+            <a class="btn btn-default btn-sm" routerLink="/panel/actualizar/{{lugar.id}}"><i class="glyphicon glyphicon-pencil"> Editar</i></a>
+            <a  class="btn btn-default btn-sm"><i class="glyphicon glyphicon-trash" (click)="eliminar(lugar)"> Eliminar</i></a>
           </li>
         </ng-container>
       </ul>
@@ -30,7 +30,7 @@
       <h4 for="">Buscar un lugar</h4>
       <input type="text" class="form-control" placeholder="Ingrese el nombre del lugar" [(ngModel)]='nombreFilter' >
       <br>
-      <a href="/crear"  class="btn btn-primary " >Crear Lugar</a>
+      <a href="/panel/crear"  class="btn btn-primary " >Crear Lugar</a>
     </div>
   </div>
 </div>

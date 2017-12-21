@@ -1,7 +1,9 @@
 export class Lugares {
-  nombre: string;
-  descripcion: string;
-  categoria: string;
-  direccion: string;
-  createdAt?: Date;
+  constructor(
+    public nombre: string,
+    public descripcion: string,
+    public categoria: string,
+    public direccion: string,
+    public createdAt?: Date
+  ){}
 }

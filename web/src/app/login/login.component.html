@@ -1,0 +1,31 @@
+<div class="container">
+  <h3 align="center" class="col-md-offset-4 col-md-4"><i>Bienvenido</i></h3>
+  <div class="row">
+    <div class="col-md-offset-4 col-md-4">
+      <div class="well">
+        <h4 align="center">Ingresa tus credenciales</h4>
+        <label for="email">Email</label>
+        <input type="email" id="email" class="form-control" [(ngModel)]="usuario.email">
+        <br>
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" class="form-control" [(ngModel)]="usuario.password">
+        <hr>
+        <button  class="btn btn-primary btn-block" (click)="login()">Login</button>
+        <a href="" class="btn btn-default btn-block">Cancelar</a>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="msg">
+        <div class="alert alert-danger alert-dismissable" *ngIf="msgError">
+          <a  class="close"  (click)="cerrar()">&times;</a>
+          <strong>Error!</strong> {{msg}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -43,6 +43,10 @@ module.exports = {
       type: 'string',
       required : true
     },
+    nombreImagen: {
+      type: 'string',
+      required: true
+    },
     visitas: {
       type: 'integer',
       defaultsTo: 0

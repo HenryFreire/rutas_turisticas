@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/Rx';
 import {Lugares} from "../clases/lugar.clase";
 import {environment} from "../../environments/environment";
+import {Observable} from "rxjs/Observable";
 @Injectable()
 
 export class LugaresServicioComponent {
@@ -16,18 +17,38 @@ export class LugaresServicioComponent {
   }
 
   getLugares(): Promise<Lugares[] >{
-    return this._http.get(this.httpUrl)
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')})
+    return this._http.get(this.httpUrl,{headers})
       .toPromise()
       .then(response => response.json())
       .catch(this.handleError);
   }
 
   buscarPorId(id) : Promise<Lugares>{
-    const url = urljoin(this.httpUrl,'buscarPorId?id=', id);
-    return this._http.get(url)
+    const url = urljoin(this.httpUrl,'buscarPorId?id=' + id);
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')})
+    return this._http.get(url,{headers})
       .toPromise()
       .then(response => response.json())
       .catch(this.handleError);
+  }
+
+  actualizarLugar(lugar:Lugares){
+    const url = urljoin(this.httpUrl,'actualizarLugar');
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')})
+    return this._http.post(url,lugar,{headers})
+      .map((response: Response) => response.json())
+      .catch((error: Response)=> Observable.throw(error.json()))
+  }
+
+  eliminarLugar(lugar: Lugares) {
+    const body = JSON.stringify(lugar);
+    const url = urljoin(this.httpUrl,'eliminar');
+    console.log(url);
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')})
+    return this._http.post(url,body,{headers})
+      .map((response: Response) => response.json())
+      .catch((error: Response)=> Observable.throw(error.json()))
   }
 
 

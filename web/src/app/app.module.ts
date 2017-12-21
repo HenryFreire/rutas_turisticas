@@ -13,10 +13,19 @@ import {NgxPaginationModule} from "ngx-pagination";
 import {LugaresFiltro} from "./pipe/filtro.nombre.pipe";
 import {FormsModule} from "@angular/forms";
 import {MomentModule} from "angular2-moment";
+import {LoginComponent} from "./login/login.component";
+import {AutentificacionServicioComponent} from "./servicios/Autentificacion.servicio.component";
+import {GuardiaServicioComponent} from "./servicios/guardia.servicio.component";
+import {PanelComponent} from "./panel/panel.component";
 const appRoutes: Routes = [
-  {path: '', component: LugaresListaComponent},
-  {path: 'crear', component: LugarComponent},
-  {path: 'actualizar/:id', component: LugarActualizarComponent}
+  {path: '', component: LoginComponent},
+  {path: 'panel', component:PanelComponent, canActivate: [GuardiaServicioComponent],
+    children:[
+      {path: 'crear', component: LugarComponent},
+      {path: 'actualizar/:id', component: LugarActualizarComponent},
+      {path: 'lugares', component: LugaresListaComponent }
+    ]}
+
 ];
 @NgModule({
   declarations: [
@@ -24,7 +33,9 @@ const appRoutes: Routes = [
     LugarComponent,
     LugarActualizarComponent,
     LugaresListaComponent,
-    LugaresFiltro
+    LugaresFiltro,
+    LoginComponent,
+    PanelComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +48,7 @@ const appRoutes: Routes = [
     FormsModule,
     MomentModule
   ],
-  providers: [  ],
+  providers: [ LugaresServicioComponent, AutentificacionServicioComponent, GuardiaServicioComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

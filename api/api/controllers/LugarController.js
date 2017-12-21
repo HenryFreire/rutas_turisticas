@@ -5,6 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 var request = require('request');
+var fs = require('fs');
 module.exports = {
 
 
@@ -31,6 +32,7 @@ module.exports = {
              url     : 'http://maps.google.com/maps/api/geocode/json?address=' + body.direccion,
              method  : 'GET',
            }
+           console.log('La direccion es: ', body.direccion);
            request(options, function (error, response, mapa) {
              if (!error && response.statusCode == 200) {
                var cordenada = JSON.parse(mapa)
@@ -41,15 +43,17 @@ module.exports = {
                 descripcion: body.descripcion,
                 categoria: body.categoria,
                 direccion: body.direccion,
-                lat: 0.25456,
-                lng: 0.2485748,
-                fotoUrl: 'http://localhost:1337/imagenes/'+hashImagen
+                lat: lat,
+                lng: lng,
+                fotoUrl: 'http://localhost:1337/imagenes/'+hashImagen,
+                nombreImagen: hashImagen
               }).exec(function (error, lugar) {
                 if(error) {
                   console.log('Ocurrio un error', error);
                   return res.negotiate(error);
                 }
-                console.log('creado: ', lugar)
+                console.log('creado: ', lugar);
+                console.log(lat,' ', lng);
                 return res.ok(lugar);
               })
              }
@@ -59,6 +63,39 @@ module.exports = {
      }
   },
 
+  actualizarLugar: function(req, res) {
+    if(req.method == 'POST'){
+      var body = req.allParams();
+      var options = {
+        url     : 'http://maps.google.com/maps/api/geocode/json?address=' + body.direccion,
+        method  : 'GET',
+      };
+      request(options, function (error, response, mapa) {
+        if (!error && response.statusCode == 200) {
+          var cordenada = JSON.parse(mapa)
+          var lat = cordenada.results[0].geometry.location.lat;
+          var lng = cordenada.results[0].geometry.location.lng;
+          Lugar.update({id : body.id},{
+            nombre: body.nombre,
+            descripcion: body.descripcion,
+            categoria: body.categoria,
+            direccion: body.direccion,
+            lat: lat,
+            lng: lng
+          }).exec(function (error, lugar) {
+            if(error) {
+              console.log('Ocurrio un error', error);
+              return res.negotiate(error);
+            }
+            console.log('actualizado: ', lugar);
+            return res.ok(lugar);
+          })
+        }
+      });
+
+    }
+
+  },
   buscarPorId : function (req, res){
     var params = req.allParams();
     console.log(params.id);
@@ -69,6 +106,25 @@ module.exports = {
       console.log('lugar ', lugar)
       return res.ok(lugar);
     });
+  },
+
+  eliminar:function (req,res) {
+    var params= req.allParams();
+    if(params.id){
+      var pathImagen = 'assets/imagenes/'+params.nombreImagen;
+      fs.unlink(pathImagen, function(err) {
+        if (err) return console.log(err);
+        Lugar.destroy({id: params.id})
+          .exec(function (err, lugarEliminado) {
+            if(err) return res.negotiate(err);
+            console.log('eliminado');
+            return res.ok({status:200,msg:'eliminado'});
+          })
+      });
+    }else{
+      console.log('faltan los parametros');
+      return res.badRequest('no envia identificador')
+    }
   }
 };
 

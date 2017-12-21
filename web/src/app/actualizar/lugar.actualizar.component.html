@@ -1,28 +1,40 @@
-<form >
+
   <div class="container">
     <h3>Actualizar Lugar</h3>
-    <label for="nombre" class="">Nombre</label>
-    <input type="text" class="form-control" name="nombre" id="nombre" >
+    <label  class="">Nombre</label>
+    <input type="text" class="form-control" [(ngModel)]="lugar.nombre"  name="nombre" >
     <br>
-    <label for="descripcion">Descripción</label>
-    <textarea name="descripcion"  cols="30" rows="4" class="form-control" id="descripcion" ></textarea>
+    <label >Descripción</label>
+    <textarea   cols="30" rows="4" class="form-control" [(ngModel)]="lugar.descripcion"  name="descripcion" ></textarea>
     <br>
-    <label for="categoria" class="">Categoria</label>
+    <label  class="">Categoria</label>
     <br>
-    <select class="form-control" name="categoria" id="categoria" >
+    <select class="form-control"  [(ngModel)]="lugar.categoria" >
       <option value="" disabled selected>Seleccionar</option>
       <option value="museo">Museo</option>
       <option value="plaza">Plaza</option>
-      <option value="institución">Institución</option>
+      <option value="institucion">Institución</option>
       <option value="parque">Parque</option>
       <option value="monumento">Monumento</option>
     </select>
     <h3>Datos de Dirección</h3>
     <br>
-    <label for="descripcion">Direccion</label>
-    <textarea name="direccion"  cols="30" rows="4" class="form-control" id="direccion" ></textarea>
+    <label >Direccion</label>
+    <textarea   cols="30" rows="4" class="form-control"  [(ngModel)]="lugar.direccion" ></textarea>
     <br>
     <hr>
-    <button class="btn btn-primary"  >Actualizar</button>
+    <button class="btn btn-primary"  (click)="actualizarLugar(lugar)" >Actualizar</button>
   </div>
-</form>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div id="msg">
+          <div class="alert alert-success alert-dismissable" *ngIf="actualizado">
+            <a  class="close"  (click)="cerrar()">&times;</a>
+            <strong>Finalizado!</strong> Lugar actualizado exitosamente.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {LugaresServicioComponent} from "../servicios/lugares.servicio.component";
 import {Lugares} from "../clases/lugar.clase";
+import {AutentificacionServicioComponent} from "../servicios/Autentificacion.servicio.component";
 
 @Component({
   selector: 'app-listaLugares',
@@ -14,13 +15,26 @@ export class LugaresListaComponent {
   lat: number = -0.274252;
   lng: number = -78.55282649999999;
   lugares: Lugares[];
+  logeado= false;
   p: number = 1;
   nombreFilter: string;
-  constructor(private lugarServicio: LugaresServicioComponent){
+  constructor(private lugarServicio: LugaresServicioComponent, private autentificacionServicio: AutentificacionServicioComponent){
     this.lugarServicio.getLugares()
       .then((lugares)=> {
         this.lugares = lugares;
         console.log(this.lugares)
+      })
+  }
+
+  eliminar(lugar : Lugares){
+    this.lugarServicio.eliminarLugar(lugar)
+      .subscribe(res => {
+        this.lugarServicio.getLugares()
+          .then((lugares)=> {
+            this.lugares = lugares;
+          })
+      },error => {
+        console.log('Ocurrio un error ', error);
       })
   }
 }
