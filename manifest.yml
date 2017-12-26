@@ -1,0 +1,19 @@
+ ---
+applications:
+- path: /api
+
+  memory: 256M
+  instances: 1
+  domain: mybluemix.net
+  name: ReadMe
+  host: inteligencialegal
+  disk_quota: 1024M
+  services:
+   - MongoReadMe
+   - DiscoveryReadMe
+
+  command: node app.js -prod
+  env:
+      NODE_ENV: production
+
+

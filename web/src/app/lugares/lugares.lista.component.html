@@ -13,12 +13,13 @@
       <ul class="list-group">
         <ng-container *ngFor="let lugar of lugares | paginate: { itemsPerPage: 5, currentPage: p } | filtroLugares: nombreFilter">
           <li class="list-group-item"  >
-            <a > <h3>{{lugar.nombre}}</h3></a>
+            <a routerLink="/panel/ver/{{lugar.id}}"> <h3>{{lugar.nombre}}</h3></a>
             <br>
             <small>Creado: {{lugar.createdAt | amLocale: 'es'| amTimeAgo}}</small>
             <br>
-            <p [innerHTML]="lugar.descripcion "></p>
+            <!--<p [innerHTML]="lugar.descripcion "></p>-->
             <p [innerHTML]="lugar.direccion "></p>
+            <p *ngIf="lugar.lat  == '0'" style="color: #ff3243;">Dirección incorrecta no se encontraron las cordenadas</p>
             <a class="btn btn-default btn-sm" routerLink="/panel/actualizar/{{lugar.id}}"><i class="glyphicon glyphicon-pencil"> Editar</i></a>
             <a  class="btn btn-default btn-sm"><i class="glyphicon glyphicon-trash" (click)="eliminar(lugar)"> Eliminar</i></a>
           </li>
@@ -30,7 +31,7 @@
       <h4 for="">Buscar un lugar</h4>
       <input type="text" class="form-control" placeholder="Ingrese el nombre del lugar" [(ngModel)]='nombreFilter' >
       <br>
-      <a href="/panel/crear"  class="btn btn-primary " >Crear Lugar</a>
+      <a  routerLink="/panel/crear"  class="btn btn-primary " >Crear Lugar</a>
     </div>
   </div>
 </div>

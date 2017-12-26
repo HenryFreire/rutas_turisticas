@@ -51,6 +51,16 @@ export class LugaresServicioComponent {
       .catch((error: Response)=> Observable.throw(error.json()))
   }
 
+  crearLugar(lugar: Lugares) {
+    const body = JSON.stringify(lugar);
+    console.log('antes de enviar: ', body)
+    const url = urljoin(this.httpUrl,'guardarLugar');
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')})
+    return this._http.post(url,body,{headers})
+      .map((response: Response) => response.json())
+      .catch((error: Response)=> Observable.throw(error.json()))
+  }
+
 
   handleError(error: any) {
     const errMsg = error.message ? error.message :

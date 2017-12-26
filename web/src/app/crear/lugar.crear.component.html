@@ -1,34 +1,35 @@
 
-<form id="myFrom" enctype="multipart/form-data">
+
   <div class="container">
-    <label for="nombre" class="">Nombre</label>
-    <input type="text" class="form-control" name="nombre" id="nombre" >
-    <br>
-    <label for="descripcion">Descripción</label>
-    <textarea name="descripcion"  cols="30" rows="4" class="form-control" id="descripcion"></textarea>
-    <br>
-    <label for="categoria" class="">Categoria</label>
-    <br>
-    <select class="form-control" name="categoria" id="categoria">
-      <option value="" disabled selected>Seleccionar</option>
-      <option value="museo">Museo</option>
-      <option value="plaza">Plaza</option>
-      <option value="institucion">Institución</option>
-      <option value="parque">Parque</option>
-      <option value="monumento">Monumento</option>
-    </select>
-    <h3>Datos de Dirección</h3>
-    <br>
-    <label for="descripcion">Direccion</label>
-    <textarea name="direccion"  cols="30" rows="4" class="form-control" id="direccion"></textarea>
-    <br>
-    <label for="imagen" class="">Imagen</label>
-    <input type="file" class="" name="imagen" id="imagen">
-    <br>
-    <hr>
-    <button  class="btn btn-primary" id="btnLugares" type="button">Guardar</button>
+    <form novalidate [formGroup]="lugarForm" (ngSubmit)="guardar()">
+      <label for="nombre" class="">Nombre</label>
+      <input type="text" class="form-control" formControlName="nombre" name="nombre" id="nombre" >
+      <br>
+      <label >Descripción</label>
+      <textarea name="descripcion"  cols="30" rows="4" class="form-control" formControlName="descripcion"></textarea>
+      <br>
+      <label  class="">Categoria</label>
+      <br>
+      <select class="form-control" name="categoria" formControlName="categoria">
+        <option value="" disabled selected>Seleccionar</option>
+        <option value="museo">Museo</option>
+        <option value="plaza">Plaza</option>
+        <option value="institucion">Institución</option>
+        <option value="parque">Parque</option>
+        <option value="monumento">Monumento</option>
+      </select>
+      <h3>Datos de Dirección</h3>
+      <br>
+      <label >Direccion</label>
+      <textarea name="direccion"  cols="30" rows="4" class="form-control" formControlName="direccion"></textarea>
+      <br>
+      <label for="imagen" class="">Imagen</label>
+      <input type="file" ng2FileSelect [uploader]="uploader" formControlName="imagen" name="imagen" id="imagen">
+      <br>
+      <hr>
+      <button  class="btn btn-primary"  [disabled]="!uploader.getNotUploadedItems().length || !lugarForm.valid" type="submit" >Guardar</button>
+    </form>
   </div>
-</form>
 <br>
 <div class="container">
   <div class="row">

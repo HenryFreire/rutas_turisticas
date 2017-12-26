@@ -58,12 +58,17 @@ module.exports.connections = {
   ***************************************************************************/
   rutasTuristicas: {
     adapter: 'sails-mongo',
-    host: 'localhost',
-    port: 27017,
-    // user: 'username', //optional
-    // password: 'password', //optional
-    database: 'rutasTuristicas' //optional
+    // host: 'localhost',
+    // port: 27017,
+    // database: 'rutasTuristicas'
+
+    url:'mongodb://admin:LRAMLETFLNZCOOUL@sl-us-south-1-portal.17.dblayer.com:30795,sl-us-south-1-portal.13.dblayer.com:30795/compose?authSource=admin&ssl=true',
+    ssl:true,
+    sslValidate:false,
+    timezone: 'utc-5'
   }
+
+
 
   /***************************************************************************
   *                                                                          *

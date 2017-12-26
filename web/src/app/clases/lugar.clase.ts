@@ -4,6 +4,7 @@ export class Lugares {
     public descripcion: string,
     public categoria: string,
     public direccion: string,
-    public createdAt?: Date
+    public createdAt?: Date,
+    public nombreImagen?: string
   ){}
 }

@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {Usuario} from "../clases/usuario";
 import {AutentificacionServicioComponent} from "../servicios/Autentificacion.servicio.component";
+import {ToasterService} from "angular2-toaster/src/toaster.service";
 
 @Component({
   selector:'app-login',
@@ -11,8 +12,7 @@ import {AutentificacionServicioComponent} from "../servicios/Autentificacion.ser
 export class  LoginComponent {
   usuario = new Usuario('','');
   msg = false;
-  msgError = false;
-  constructor(private autentificacionServicio: AutentificacionServicioComponent){}
+  constructor(private autentificacionServicio: AutentificacionServicioComponent, private mensajeria: ToasterService){}
   login() {
     console.log('Usuario ', this.usuario);
     this.autentificacionServicio.login(this.usuario)
@@ -20,13 +20,12 @@ export class  LoginComponent {
         console.log('ok ', res)
         localStorage.setItem("token", res.token);
         localStorage.setItem("email", res.email);
+        this.mensajeria.pop('success', 'Ok','Bienvenido');
       },error => {
-        this.msgError =true;
-        this.msg = error.msg;
+        console.log(error);
+        this.mensajeria.pop('error', 'Atención','Credenciales incorrectas');
       })
   }
 
-  cerrar(){
-    this.msgError = false
-  }
+
 }

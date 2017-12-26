@@ -1,16 +1,16 @@
 import {Component} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {LugaresServicioComponent} from "../servicios/lugares.servicio.component";
-import {Lugares} from "../clases/lugar.clase";
 import {ToasterService} from "angular2-toaster/src/toaster.service";
+import {Lugares} from "../clases/lugar.clase";
 
 @Component({
-  selector: 'app-editarLugar',
-  templateUrl: './lugar.actualizar.component.html',
-  styleUrls: ['./lugar.actualizar.component.css']
+  selector: 'app-ver-lugar',
+  templateUrl: './ver.lugar.component.html',
+  styleUrls: ['./ver.lugar.component.css']
 })
 
-export class LugarActualizarComponent {
+export class VerLugarComponent {
   id = null;
   lugar = new Lugares('','','','',null);
   constructor(private route: ActivatedRoute, private lugaresServicio: LugaresServicioComponent, private mensajeria: ToasterService){
@@ -21,16 +21,4 @@ export class LugarActualizarComponent {
         console.log('EL lugar es: ', lugar);
       })
   }
-
-  actualizarLugar(lugar: Lugares){
-    this.lugaresServicio.actualizarLugar(lugar)
-      .subscribe(res =>{
-        this.mensajeria.pop('success', 'Ok','Actualizado');
-      },error => {
-        console.log('Error mira ', error);
-        this.mensajeria.pop('error', 'Error','Intentelo luego');
-      })
-  }
-
-
 }

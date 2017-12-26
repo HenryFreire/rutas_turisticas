@@ -1,0 +1,14 @@
+<div class="container">
+  <h1>{{lugar.nombre}}</h1>
+  <hr>
+  <br>
+  <!-- Esto es de GOOGLE MAP-->
+  <agm-map  [latitude]="lugar.lat" [longitude]="lugar.lng" [zoom]="16">
+    <agm-marker  [latitude]="lugar.lat" [longitude]="lugar.lng"></agm-marker>
+  </agm-map>
+  <!---->
+  <br>
+  <label for="">DIRECCION:</label>
+  <p>{{lugar.direccion}}</p>
+  <img src="{{lugar.fotoUrl}}" alt="" width="400" height="300">
+</div>

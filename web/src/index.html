@@ -7,42 +7,44 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/ng2-toastr/toaster.css">
 </head>
 <body>
   <app-root></app-root>
+
 </body>
 </html>
 <!--<script src="assets/jquery-3.2.1.min.js"></script>-->
 <!--<script src="assets/ajax.js"></script>-->
 <script>
-  function saludar() {
-    console.log('Hola Mundo');
-  }
 
-  $(document).ready(function() {
-      var success = `    <div class="alert alert-success alert-dismissable">
-                            <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                            <strong>Finalizado!</strong> Lugar creado exitosamente.
-                          </div>
-    `;
-    var options = {
-      success: function(res){
-        console.log(res);
-        $('#msg').html(success);
 
-      },
-      error: function(error){
-        console.log('error', error);
-      },
-      url: 'http://localhost:1337/Lugar/subir',
-      method: "POST",
-      headers: {"Authorization": localStorage.getItem('token')},
-      clearForm: true
-    };
-    $('#btnLugares').on('click', function() {
-      console.log('Enviado');
-      $('#myFrom').ajaxSubmit(options);
-    });
-  });
+    // No utilizar esto en angular no es compatible
+
+//      var success = `    <div class="alert alert-success alert-dismissable">
+//                            <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+//                            <strong>Finalizado!</strong> Lugar creado exitosamente.
+//                          </div>
+//    `;
+//    var options = {
+//      success: function(res){
+//        console.log(res);
+//        $('#msg').html(success);
+//
+//      },
+//      error: function(error){
+//        console.log('error', error);
+//      },
+//      url: 'http://localhost:1337/Lugar/subir',
+//      method: "POST",
+//      headers: {"Authorization": localStorage.getItem('token')},
+//      clearForm: true
+//    };
+//    $('#btnLugares').on('click', function() {
+//      console.log('Enviado');
+//      $('#myFrom').ajaxSubmit(options);
+//    });
+
+
 
 </script>
