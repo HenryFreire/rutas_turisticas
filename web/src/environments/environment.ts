@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  //apiUrl: 'https://rutasturisticas.mybluemix.net'
-  apiUrl: 'http://localhost:1337'
+  apiUrl: 'https://rutasturisticas.mybluemix.net'
+ // apiUrl: 'http://localhost:1337'
 };

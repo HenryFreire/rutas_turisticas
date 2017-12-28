@@ -63,11 +63,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var LugarActualizarComponent = (function () {
-    function LugarActualizarComponent(route, lugaresServicio, mensajeria) {
+    function LugarActualizarComponent(route, lugaresServicio, mensajeria, router) {
         var _this = this;
         this.route = route;
         this.lugaresServicio = lugaresServicio;
         this.mensajeria = mensajeria;
+        this.router = router;
         this.id = null;
         this.lugar = new __WEBPACK_IMPORTED_MODULE_3__clases_lugar_clase__["a" /* Lugares */]('', '', '', '', null);
         this.id = this.route.snapshot.params['id'];
@@ -84,7 +85,14 @@ var LugarActualizarComponent = (function () {
             _this.mensajeria.pop('success', 'Ok', 'Actualizado');
         }, function (error) {
             console.log('Error mira ', error);
-            _this.mensajeria.pop('error', 'Error', 'Intentelo luego');
+            if (error.status == 403) {
+                localStorage.clear();
+                _this.router.navigate(['']);
+                location.reload();
+            }
+            else {
+                _this.mensajeria.pop('error', 'Error', 'Intentelo luego');
+            }
         });
     };
     return LugarActualizarComponent;
@@ -95,10 +103,10 @@ LugarActualizarComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/actualizar/lugar.actualizar.component.html"),
         styles: [__webpack_require__("../../../../../src/app/actualizar/lugar.actualizar.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4_angular2_toaster_src_toaster_service__["a" /* ToasterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angular2_toaster_src_toaster_service__["a" /* ToasterService */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4_angular2_toaster_src_toaster_service__["a" /* ToasterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_angular2_toaster_src_toaster_service__["a" /* ToasterService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _d || Object])
 ], LugarActualizarComponent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d;
 //# sourceMappingURL=lugar.actualizar.component.js.map
 
 /***/ }),
@@ -352,6 +360,7 @@ module.exports = "\r\n\r\n  <div class=\"container\">\r\n    <form novalidate [f
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__clases_lugar_clase__ = __webpack_require__("../../../../../src/app/clases/lugar.clase.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__servicios_lugares_servicio_component__ = __webpack_require__("../../../../../src/app/servicios/lugares.servicio.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_angular2_toaster_src_toaster_service__ = __webpack_require__("../../../../angular2-toaster/src/toaster.service.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -367,11 +376,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var LugarComponent = (function () {
-    function LugarComponent(_fb, lugaresServicio, mensajeria) {
+    function LugarComponent(_fb, lugaresServicio, mensajeria, router) {
         this._fb = _fb;
         this.lugaresServicio = lugaresServicio;
         this.mensajeria = mensajeria;
+        this.router = router;
         this.lugar = new __WEBPACK_IMPORTED_MODULE_3__clases_lugar_clase__["a" /* Lugares */]('', '', '', '');
         this.uploader = new __WEBPACK_IMPORTED_MODULE_1_ng2_file_upload__["FileUploader"]({
             url: 'https://rutasturisticas.mybluemix.net/Lugar/subirFoto',
@@ -387,7 +398,6 @@ var LugarComponent = (function () {
             console.log('response de file upload: ', ftpResponse);
             _this.lugar = _this.lugarForm.value;
             _this.lugar.nombreImagen = server.nombreImagen;
-            _this.lugar.fotoUrl = server.urlImagen;
             _this.lugaresServicio.crearLugar(_this.lugar)
                 .subscribe(function (res) {
                 console.log('guardando..', res);
@@ -395,7 +405,14 @@ var LugarComponent = (function () {
                 _this.lugarForm.reset();
             }, function (error) {
                 console.log('hoho: ', error);
-                _this.mensajeria.pop('error', 'Error', 'Intentelo luego');
+                if (error.status == 403) {
+                    localStorage.clear();
+                    _this.router.navigate(['']);
+                    location.reload();
+                }
+                else {
+                    _this.mensajeria.pop('error', 'Error', 'Intentelo luego');
+                }
             });
         };
     };
@@ -418,10 +435,10 @@ LugarComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/crear/lugar.crear.component.html"),
         styles: [__webpack_require__("../../../../../src/app/crear/lugar.crear.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5_angular2_toaster_src_toaster_service__["a" /* ToasterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5_angular2_toaster_src_toaster_service__["a" /* ToasterService */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormBuilder */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_4__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5_angular2_toaster_src_toaster_service__["a" /* ToasterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5_angular2_toaster_src_toaster_service__["a" /* ToasterService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_6__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__angular_router__["b" /* Router */]) === "function" && _d || Object])
 ], LugarComponent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d;
 //# sourceMappingURL=lugar.crear.component.js.map
 
 /***/ }),
@@ -531,7 +548,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/lugares/lugares.lista.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<agm-map [latitude]=\"lat\" [longitude]=\"lng\" [zoom]=\"13\">\r\n  <agm-marker *ngFor=\"let lugar of lugares\" [latitude]=\"lugar.lat\" [longitude]=\"lugar.lng\"></agm-marker>\r\n</agm-map>\r\n<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-sm-12\">\r\n      <h3>Lista de Lugares</h3>\r\n    </div>\r\n  </div>\r\n  <br>\r\n  <div class=\"row\">\r\n    <div class=\"col-md-8\">\r\n      <ul class=\"list-group\">\r\n        <ng-container *ngFor=\"let lugar of lugares | paginate: { itemsPerPage: 5, currentPage: p } | filtroLugares: nombreFilter\">\r\n          <li class=\"list-group-item\"  >\r\n            <a routerLink=\"/panel/ver/{{lugar.id}}\"> <h3>{{lugar.nombre}}</h3></a>\r\n            <br>\r\n            <small>Creado: {{lugar.createdAt | amLocale: 'es'| amTimeAgo}}</small>\r\n            <br>\r\n            <!--<p [innerHTML]=\"lugar.descripcion \"></p>-->\r\n            <p [innerHTML]=\"lugar.direccion \"></p>\r\n            <p *ngIf=\"lugar.lat  == '0'\" style=\"color: #ff3243;\">Dirección incorrecta no se encontraron las cordenadas</p>\r\n            <a class=\"btn btn-default btn-sm\" routerLink=\"/panel/actualizar/{{lugar.id}}\"><i class=\"glyphicon glyphicon-pencil\"> Editar</i></a>\r\n            <a  class=\"btn btn-default btn-sm\"><i class=\"glyphicon glyphicon-trash\" (click)=\"eliminar(lugar)\"> Eliminar</i></a>\r\n          </li>\r\n        </ng-container>\r\n      </ul>\r\n      <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\r\n    </div>\r\n    <div class=\"col-sm-4\">\r\n      <h4 for=\"\">Buscar un lugar</h4>\r\n      <input type=\"text\" class=\"form-control\" placeholder=\"Ingrese el nombre del lugar\" [(ngModel)]='nombreFilter' >\r\n      <br>\r\n      <a  routerLink=\"/panel/crear\"  class=\"btn btn-primary \" >Crear Lugar</a>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+module.exports = "<agm-map [latitude]=\"lat\" [longitude]=\"lng\" [zoom]=\"13\">\r\n  <agm-marker *ngFor=\"let lugar of lugares\" [latitude]=\"lugar.lat\" [longitude]=\"lugar.lng\"></agm-marker>\r\n</agm-map>\r\n<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-sm-12\">\r\n      <h3>Lista de Lugares</h3>\r\n    </div>\r\n  </div>\r\n  <br>\r\n  <div class=\"row\">\r\n    <div class=\"col-md-8\">\r\n      <ul class=\"list-group\">\r\n        <ng-container *ngFor=\"let lugar of lugares | paginate: { itemsPerPage: 5, currentPage: p } | filtroLugares: nombreFilter\">\r\n          <li class=\"list-group-item\"  >\r\n            <a routerLink=\"/panel/ver/{{lugar.id}}\"> <h3>{{lugar.nombre}}</h3></a>\r\n            <br>\r\n            <small>Creado: {{lugar.createdAt | amLocale: 'es'| amTimeAgo}}</small>\r\n            <br>\r\n            <!--<p [innerHTML]=\"lugar.descripcion \"></p>-->\r\n            <p [innerHTML]=\"lugar.direccion \"></p>\r\n            <p *ngIf=\"lugar.lat  == '0'\" style=\"color: #ff3243;\">Dirección incorrecta no se encontraron las cordenadas</p>\r\n            <a class=\"btn btn-default btn-sm\" routerLink=\"/panel/actualizar/{{lugar.id}}\"><i class=\"glyphicon glyphicon-pencil\"> Editar</i></a>\r\n            <a  class=\"btn btn-default btn-sm\" (click)=\"eliminar(lugar)\" ><i class=\"glyphicon glyphicon-trash\" > Eliminar</i></a>\r\n          </li>\r\n        </ng-container>\r\n      </ul>\r\n      <pagination-controls (pageChange)=\"p = $event\"></pagination-controls>\r\n    </div>\r\n    <div class=\"col-sm-4\">\r\n      <h4 for=\"\">Buscar un lugar</h4>\r\n      <input type=\"text\" class=\"form-control\" placeholder=\"Ingrese el nombre del lugar\" [(ngModel)]='nombreFilter' >\r\n      <br>\r\n      <a  routerLink=\"/panel/crear\"  class=\"btn btn-primary \" >Crear Lugar</a>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -544,6 +561,7 @@ module.exports = "<agm-map [latitude]=\"lat\" [longitude]=\"lng\" [zoom]=\"13\">
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__servicios_lugares_servicio_component__ = __webpack_require__("../../../../../src/app/servicios/lugares.servicio.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__servicios_Autentificacion_servicio_component__ = __webpack_require__("../../../../../src/app/servicios/Autentificacion.servicio.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angular2_toaster_src_toaster_service__ = __webpack_require__("../../../../angular2-toaster/src/toaster.service.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -557,12 +575,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var LugaresListaComponent = (function () {
-    function LugaresListaComponent(lugarServicio, autentificacionServicio, mensajeria) {
+    function LugaresListaComponent(lugarServicio, autentificacionServicio, mensajeria, router) {
         var _this = this;
         this.lugarServicio = lugarServicio;
         this.autentificacionServicio = autentificacionServicio;
         this.mensajeria = mensajeria;
+        this.router = router;
         // Cordenadas de inicio de google map
         this.lat = -0.274252;
         this.lng = -78.55282649999999;
@@ -571,7 +591,6 @@ var LugaresListaComponent = (function () {
         this.lugarServicio.getLugares()
             .then(function (lugares) {
             _this.lugares = lugares;
-            console.log(_this.lugares);
         });
     }
     LugaresListaComponent.prototype.eliminar = function (lugar) {
@@ -585,6 +604,14 @@ var LugaresListaComponent = (function () {
             });
         }, function (error) {
             console.log('Ocurrio un error ', error);
+            if (error.status == 403) {
+                localStorage.clear();
+                _this.router.navigate(['']);
+                location.reload();
+            }
+            else {
+                _this.mensajeria.pop('error', 'Error', 'Intentelo luego');
+            }
         });
     };
     return LugaresListaComponent;
@@ -596,10 +623,10 @@ LugaresListaComponent = __decorate([
         styles: [__webpack_require__("../../../../../src/app/lugares/lugares.lista.component.css")],
         providers: [__WEBPACK_IMPORTED_MODULE_1__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */]]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__servicios_Autentificacion_servicio_component__["a" /* AutentificacionServicioComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__servicios_Autentificacion_servicio_component__["a" /* AutentificacionServicioComponent */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3_angular2_toaster_src_toaster_service__["a" /* ToasterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_angular2_toaster_src_toaster_service__["a" /* ToasterService */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__servicios_lugares_servicio_component__["a" /* LugaresServicioComponent */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__servicios_Autentificacion_servicio_component__["a" /* AutentificacionServicioComponent */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__servicios_Autentificacion_servicio_component__["a" /* AutentificacionServicioComponent */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3_angular2_toaster_src_toaster_service__["a" /* ToasterService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_angular2_toaster_src_toaster_service__["a" /* ToasterService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */]) === "function" && _d || Object])
 ], LugaresListaComponent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d;
 //# sourceMappingURL=lugares.lista.component.js.map
 
 /***/ }),
@@ -866,8 +893,9 @@ var LugaresServicioComponent = (function () {
         this.httpUrl = __WEBPACK_IMPORTED_MODULE_2_url_join___default()(__WEBPACK_IMPORTED_MODULE_7__environments_environment__["a" /* environment */].apiUrl, 'Lugar');
     }
     LugaresServicioComponent.prototype.getLugares = function () {
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ 'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token') });
-        return this._http.get(this.httpUrl, { headers: headers })
+        var url = __WEBPACK_IMPORTED_MODULE_2_url_join___default()(this.httpUrl, 'getLugares');
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ 'Content-Type': 'application/json' });
+        return this._http.get(url, { headers: headers })
             .toPromise()
             .then(function (response) { return response.json(); })
             .catch(this.handleError);
@@ -943,7 +971,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/verLugar/ver.lugar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n  <h1>{{lugar.nombre}}</h1>\r\n  <hr>\r\n  <br>\r\n  <!-- Esto es de GOOGLE MAP-->\r\n  <agm-map  [latitude]=\"lugar.lat\" [longitude]=\"lugar.lng\" [zoom]=\"16\" *ngIf=\"lugar.lat  != '0'\">\r\n    <agm-marker  [latitude]=\"lugar.lat\" [longitude]=\"lugar.lng\"></agm-marker>\r\n  </agm-map>\r\n  <p *ngIf=\"lugar.lat  == '0'\" style=\"color: #ff3243;\">Dirección incorrecta no se encontraron las cordenadas</p>\r\n  <!---->\r\n  <br>\r\n  <label for=\"\">DIRECCION:</label>\r\n  <p>{{lugar.direccion}}</p>\r\n  <img src=\"{{lugar.fotoUrl}}\" alt=\"\" width=\"400\" height=\"300\">\r\n</div>\r\n"
+module.exports = "<div class=\"container\">\r\n  <h1>{{lugar.nombre}}</h1>\r\n  <hr>\r\n  <br>\r\n  <!-- Esto es de GOOGLE MAP-->\r\n  <agm-map  [latitude]=\"lugar.lat\" [longitude]=\"lugar.lng\" [zoom]=\"16\" *ngIf=\"lugar.lat  != '0'\">\r\n    <agm-marker  [latitude]=\"lugar.lat\" [longitude]=\"lugar.lng\"></agm-marker>\r\n  </agm-map>\r\n  <p *ngIf=\"lugar.lat  == '0'\" style=\"color: #ff3243;\">Dirección incorrecta no se encontraron las cordenadas</p>\r\n  <!---->\r\n  <br>\r\n  <label for=\"\">DIRECCION:</label>\r\n  <p>{{lugar.direccion}}</p>\r\n  <img src=\"data:image/png;base64,{{lugar.fotoUrl}}\" alt=\"\" width=\"400\" height=\"300\">\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1015,7 +1043,7 @@ var _a, _b, _c;
 var environment = {
     production: false,
     apiUrl: 'https://rutasturisticas.mybluemix.net'
-    //apiUrl: 'http://localhost:1337'
+    // apiUrl: 'http://localhost:1337'
 };
 //# sourceMappingURL=environment.js.map
 

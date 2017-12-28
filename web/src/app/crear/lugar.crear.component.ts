@@ -18,7 +18,7 @@ export class LugarComponent implements  OnInit{
 
 constructor(private _fb: FormBuilder, private lugaresServicio: LugaresServicioComponent, private mensajeria: ToasterService, private router: Router){}
   public uploader:FileUploader = new FileUploader({
-    url: 'http://localhost:1337/Lugar/subirFoto',
+    url: 'https://rutasturisticas.mybluemix.net/Lugar/subirFoto',
     itemAlias: 'imagen',
     authToken: localStorage.getItem('token'),
   });
