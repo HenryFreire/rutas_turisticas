@@ -3,6 +3,7 @@ import {LugaresServicioComponent} from "../servicios/lugares.servicio.component"
 import {Lugares} from "../clases/lugar.clase";
 import {AutentificacionServicioComponent} from "../servicios/Autentificacion.servicio.component";
 import {ToasterService} from "angular2-toaster/src/toaster.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-listaLugares',
@@ -19,11 +20,10 @@ export class LugaresListaComponent {
   logeado= false;
   p: number = 1;
   nombreFilter: string;
-  constructor(private lugarServicio: LugaresServicioComponent, private autentificacionServicio: AutentificacionServicioComponent, private mensajeria: ToasterService){
+  constructor(private lugarServicio: LugaresServicioComponent, private autentificacionServicio: AutentificacionServicioComponent, private mensajeria: ToasterService, private router: Router){
     this.lugarServicio.getLugares()
       .then((lugares)=> {
         this.lugares = lugares;
-        console.log(this.lugares)
       })
   }
 
@@ -37,6 +37,14 @@ export class LugaresListaComponent {
           })
       },error => {
         console.log('Ocurrio un error ', error);
+        if(error.status == 403){
+          localStorage.clear();
+          this.router.navigate(['']);
+          location.reload();
+
+        }else{
+          this.mensajeria.pop('error', 'Error','Intentelo luego');
+        }
       })
   }
 }

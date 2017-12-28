@@ -22,6 +22,7 @@ export class AutentificacionServicioComponent {
   login(usuario: Usuario) {
     const body = JSON.stringify(usuario);
     const url = urljoin(this.httpUrl, 'login');
+    console.log('mi url es: ', url);
     const headers = new Headers({'Content-Type': 'application/json'});
     return this.http.post(url,body, { headers })
       .map((response: Response) => {
@@ -37,6 +38,7 @@ export class AutentificacionServicioComponent {
       });
   }
 
+
     isLogged(){
       return this.logeado;
     }
@@ -46,4 +48,6 @@ export class AutentificacionServicioComponent {
     this.router.navigate(['']);
     location.reload()
   }
+
+
 }

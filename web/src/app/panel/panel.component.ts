@@ -7,6 +7,7 @@ import {AutentificacionServicioComponent} from "../servicios/Autentificacion.ser
 })
 
 export class PanelComponent {
+  usuario : string = localStorage.getItem('email')
   constructor(private autentificacionServicio: AutentificacionServicioComponent){
 
   }

@@ -45,6 +45,8 @@ module.exports = {
     }else {
       return res.badRequest({mensaje:"No envia usuario ni password"});
     }
-  }
+  },
+
+
 };
 

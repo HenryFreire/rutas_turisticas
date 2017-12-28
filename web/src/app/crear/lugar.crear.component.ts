@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Lugares} from "../clases/lugar.clase";
 import {LugaresServicioComponent} from "../servicios/lugares.servicio.component";
 import {ToasterService} from "angular2-toaster/src/toaster.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-lugar',
@@ -15,7 +16,7 @@ export class LugarComponent implements  OnInit{
   lugarForm: FormGroup;
   lugar = new Lugares('','','','');
 
-constructor(private _fb: FormBuilder, private lugaresServicio: LugaresServicioComponent, private mensajeria: ToasterService){}
+constructor(private _fb: FormBuilder, private lugaresServicio: LugaresServicioComponent, private mensajeria: ToasterService, private router: Router){}
   public uploader:FileUploader = new FileUploader({
     url: 'http://localhost:1337/Lugar/subirFoto',
     itemAlias: 'imagen',
@@ -27,18 +28,25 @@ guardar(){
   this.uploader.uploadAll();
   this.uploader.onCompleteItem = (item: FileItem, ftpResponse: any, status: number, headers:any) => {
     var server = JSON.parse(ftpResponse);
+    console.log('response de file upload: ', ftpResponse);
+
     this.lugar = this.lugarForm.value;
-    console.log(ftpResponse);
-    this.lugar.nombreImagen = server.hashImagen;
-    console.log('nuevo item ', this.lugar)
+    this.lugar.nombreImagen = server.nombreImagen;
+
     this.lugaresServicio.crearLugar(this.lugar)
       .subscribe((res)=>{
-        console.log('guardando..', this.lugar)
+        console.log('guardando..', res);
         this.mensajeria.pop('success', 'Ok','Lugar creado');
         this.lugarForm.reset();
       }, (error)=> {
         console.log('hoho: ', error);
-        this.mensajeria.pop('error', 'Error','Intentelo luego');
+        if(error.status == 403){
+          localStorage.clear();
+          this.router.navigate(['']);
+          location.reload();
+        }else{
+          this.mensajeria.pop('error', 'Error','Intentelo luego');
+        }
       });
 
 

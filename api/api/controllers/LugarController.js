@@ -6,7 +6,7 @@
  */
 var request = require('request');
 var fs = require('fs');
-var urlServidorImagen = 'http://localhost:1337/imagenes/'
+var fsy = require('file-system');
 module.exports = {
 
   subirFoto: function(req,res){
@@ -23,19 +23,47 @@ module.exports = {
           if (uploadedFiles.length === 0){
             return res.badRequest('No se subio la imagen');
           }
+          var nombreImagen='';
           var primerSplit= (uploadedFiles[0].fd).split("\\");
           var segundoSplit = primerSplit[primerSplit.length-1].split('/');
           var hashImagen = segundoSplit[segundoSplit.length-1];
-          return res.ok({satus:201, msg:'imagen guardada', hashImagen: hashImagen })
+          var aux = (uploadedFiles[0].filename).split(".");
+          nombreImagen = aux[0];
+
+          console.log('upload file es ', uploadedFiles[0].fd);
+          console.log('split de upload file', primerSplit);
+
+
+
+          console.log('aux: ', aux);
+
+
+          fs.exists('assets/imagenes/'+hashImagen, function (exists)  {
+            if(exists){
+              console.log('existe: ', exists)
+              return res.ok({ msg:'creado: '+ exists, nombreImagen:hashImagen  })
+            }else{
+              console.log('no existe: ', exists)
+            }
+          });
         });
       }
     }
   },
 
+  getLugares: function(req, res) {
+    Lugar.find().exec(function (err, lugares) {
+      if(err){
+        return res.negotiate(err)
+      }else{
+        return res.ok(lugares)
+      }
+    })
+  },
+
   guardarLugar: function(req, res) {
     if(req.method == 'POST') {
       var body = req.allParams();
-      console.log('llego esto mira ', body);
       // google maps
       var options = {
         url     : 'http://maps.google.com/maps/api/geocode/json?address=' + body.direccion,
@@ -47,24 +75,34 @@ module.exports = {
           var cordenada = JSON.parse(mapa);
           var lat = (cordenada.results.length > 0)? cordenada.results[0].geometry.location.lat : 0 ;
           var lng = (cordenada.results.length > 0)? cordenada.results[0].geometry.location.lng: 0;
-          Lugar.create({
-            nombre: body.nombre,
-            descripcion: body.descripcion,
-            categoria: body.categoria,
-            direccion: body.direccion,
-            lat: lat,
-            lng: lng,
-            fotoUrl: urlServidorImagen + body.nombreImagen,
-            nombreImagen: body.nombreImagen
-          }).exec(function (error, lugar) {
-            if(error) {
-              console.log('Ocurrio un error', error);
-              return res.negotiate(error);
+          var pathImagen = 'assets/imagenes/'+body.nombreImagen;
+          fs.readFile(pathImagen, 'base64', function(err, data){
+            if(err){
+              console.log('Ocurrio un error', err);
+              return res.negotiate({msg: err})
+            }else{
+              console.log('se tiene la data: ');
+              Lugar.create({
+                nombre: body.nombre,
+                descripcion: body.descripcion,
+                categoria: body.categoria,
+                direccion: body.direccion,
+                lat: lat,
+                lng: lng,
+                fotoUrl: data,
+                nombreImagen: body.nombreImagen
+              }).exec(function (error, lugar) {
+                if(error) {
+                  console.log('Ocurrio un error', error);
+                  return res.negotiate(error);
+                }
+                console.log('creado');
+                console.log(lat,' ', lng);
+                return res.ok(lugar);
+              })
             }
-            console.log('creado: ', lugar);
-            console.log(lat,' ', lng);
-            return res.ok(lugar);
-          })
+          });
+
         }
       });
 
@@ -93,14 +131,16 @@ module.exports = {
             direccion: body.direccion,
             lat: lat,
             lng: lng
-          }).exec(function (error, lugar) {
+          }).exec(function (err, lugar) {
             if(error) {
-              console.log('Ocurrio un error', error);
-              return res.negotiate(error);
+              console.log('Ocurrio un error', err);
+              return res.negotiate(err);
             }
-            console.log('actualizado: ', lugar);
+            console.log('actualizado ');
             return res.ok(lugar);
           })
+        }else {
+          return res.negotiate(error);
         }
       });
 
@@ -114,13 +154,14 @@ module.exports = {
       id: params.id
     }).exec(function (err, lugar){
       if (err) return res.serverError(err);
-      console.log('lugar ', lugar)
+      console.log('encontrado ')
       return res.ok(lugar);
     });
   },
 
   eliminar:function (req,res) {
     var params= req.allParams();
+    console.log(params.id,' nombre ', params.nombreImagen);
     if(params.id){
       var pathImagen = 'assets/imagenes/'+params.nombreImagen;
       fs.unlink(pathImagen, function(err) {
@@ -130,13 +171,45 @@ module.exports = {
             if(err) return res.negotiate(err);
             console.log('eliminado');
             return res.ok({status:200,msg:'eliminado'});
-          })
-      });
+         })
+       });
     }else{
       console.log('faltan los parametros');
       return res.badRequest('no envia identificador')
     }
+  },
+
+  contarVisita: function(req, res){
+    var params= req.allParams();
+    console.log(params.id )
+    var contarMasUno = params.visitas + 1;
+    Lugar.update({id: params.id},{visitas: contarMasUno}).exec(function(error, resultado){
+      if(error) res.badRequest(error);
+      res.ok(resultado);
+    });
+  },
+
+  masPopulares: function(req, res){
+    Lugar.find({
+      sort: 'visitas DESC',
+      limit: 5
+    }).exec(function(err, fin){
+      if(err) res.badRequest(err);
+      res.ok(fin);
+    })
+  },
+
+  categoria: function(req, res){
+    var params = req.allParams();
+    console.log('Pidio por: ', params.categoria);
+    Lugar.find({
+      categoria: params.categoria
+    }).exec(function(err, fin){
+      if(err) res.badRequest(err);
+      res.ok(fin);
+    })
   }
+
 };
 
 

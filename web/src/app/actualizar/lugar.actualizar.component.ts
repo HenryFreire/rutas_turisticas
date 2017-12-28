@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {LugaresServicioComponent} from "../servicios/lugares.servicio.component";
 import {Lugares} from "../clases/lugar.clase";
 import {ToasterService} from "angular2-toaster/src/toaster.service";
@@ -13,7 +13,7 @@ import {ToasterService} from "angular2-toaster/src/toaster.service";
 export class LugarActualizarComponent {
   id = null;
   lugar = new Lugares('','','','',null);
-  constructor(private route: ActivatedRoute, private lugaresServicio: LugaresServicioComponent, private mensajeria: ToasterService){
+  constructor(private route: ActivatedRoute, private lugaresServicio: LugaresServicioComponent, private mensajeria: ToasterService, private router: Router){
     this.id = this.route.snapshot.params['id'];
     this.lugaresServicio.buscarPorId(this.id)
       .then((lugar)=>{
@@ -28,7 +28,13 @@ export class LugarActualizarComponent {
         this.mensajeria.pop('success', 'Ok','Actualizado');
       },error => {
         console.log('Error mira ', error);
-        this.mensajeria.pop('error', 'Error','Intentelo luego');
+        if(error.status == 403){
+          localStorage.clear();
+          this.router.navigate(['']);
+          location.reload()
+        }else{
+          this.mensajeria.pop('error', 'Error','Intentelo luego');
+        }
       })
   }
 

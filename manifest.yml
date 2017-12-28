@@ -1,16 +1,14 @@
- ---
 applications:
 - path: /api
 
   memory: 256M
   instances: 1
   domain: mybluemix.net
-  name: ReadMe
-  host: inteligencialegal
+  name: rutasTuristicas
+  host: rutasTuristicas
   disk_quota: 1024M
   services:
-   - MongoReadMe
-   - DiscoveryReadMe
+   - mongoHenry
 
   command: node app.js -prod
   env:

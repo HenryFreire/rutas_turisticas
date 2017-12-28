@@ -17,8 +17,9 @@ export class LugaresServicioComponent {
   }
 
   getLugares(): Promise<Lugares[] >{
-    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')})
-    return this._http.get(this.httpUrl,{headers})
+    const url = urljoin(this.httpUrl,'getLugares');
+    const headers = new Headers({'Content-Type': 'application/json'})
+    return this._http.get(url,{headers})
       .toPromise()
       .then(response => response.json())
       .catch(this.handleError);
@@ -45,7 +46,7 @@ export class LugaresServicioComponent {
     const body = JSON.stringify(lugar);
     const url = urljoin(this.httpUrl,'eliminar');
     console.log(url);
-    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')})
+    const headers = new Headers({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')});
     return this._http.post(url,body,{headers})
       .map((response: Response) => response.json())
       .catch((error: Response)=> Observable.throw(error.json()))
@@ -60,6 +61,8 @@ export class LugaresServicioComponent {
       .map((response: Response) => response.json())
       .catch((error: Response)=> Observable.throw(error.json()))
   }
+
+
 
 
   handleError(error: any) {

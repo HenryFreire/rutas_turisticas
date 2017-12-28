@@ -5,10 +5,10 @@ module.exports = function (req, res, next) {
   if (cabeceras.authorization) {
     var token = cabeceras.authorization.replace('bearer ', '');
     jwt.verify(token, token_config.secreto, function (err, token) {
-      if (err) return res.forbidden({mensaje: 'No es un token valido'});
+      if (err) return res.forbidden({mensaje: 'No es un token valido', status:403});
       return next();
     });
   } else {
-    return res.forbidden({mensaje: 'No envia cabecera de autorizacion'})
+    return res.forbidden({mensaje: 'No envia cabecera de autorizacion', status:403})
   }
 };

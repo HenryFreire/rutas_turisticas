@@ -21,7 +21,7 @@
             <p [innerHTML]="lugar.direccion "></p>
             <p *ngIf="lugar.lat  == '0'" style="color: #ff3243;">Dirección incorrecta no se encontraron las cordenadas</p>
             <a class="btn btn-default btn-sm" routerLink="/panel/actualizar/{{lugar.id}}"><i class="glyphicon glyphicon-pencil"> Editar</i></a>
-            <a  class="btn btn-default btn-sm"><i class="glyphicon glyphicon-trash" (click)="eliminar(lugar)"> Eliminar</i></a>
+            <a  class="btn btn-default btn-sm" (click)="eliminar(lugar)" ><i class="glyphicon glyphicon-trash" > Eliminar</i></a>
           </li>
         </ng-container>
       </ul>

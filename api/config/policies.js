@@ -27,7 +27,15 @@ module.exports.policies = {
   ***************************************************************************/
 
   LugarController: {
-    '*':'esJwtValido'
+    guardarLugar:'esJwtValido',
+    subirFoto: 'esJwtValido',
+    contarVisita: true,
+    masPopulares: true,
+    categoria: true,
+    eliminar:'esJwtValido',
+    buscarPorId: true,
+    actualizarLugar: 'esJwtValido',
+    getLugares: true
   },
   UsuarioController: {
     '*': true

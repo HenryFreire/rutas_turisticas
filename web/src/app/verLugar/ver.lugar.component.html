@@ -3,12 +3,13 @@
   <hr>
   <br>
   <!-- Esto es de GOOGLE MAP-->
-  <agm-map  [latitude]="lugar.lat" [longitude]="lugar.lng" [zoom]="16">
+  <agm-map  [latitude]="lugar.lat" [longitude]="lugar.lng" [zoom]="16" *ngIf="lugar.lat  != '0'">
     <agm-marker  [latitude]="lugar.lat" [longitude]="lugar.lng"></agm-marker>
   </agm-map>
+  <p *ngIf="lugar.lat  == '0'" style="color: #ff3243;">Dirección incorrecta no se encontraron las cordenadas</p>
   <!---->
   <br>
   <label for="">DIRECCION:</label>
   <p>{{lugar.direccion}}</p>
-  <img src="{{lugar.fotoUrl}}" alt="" width="400" height="300">
+  <img src="data:image/png;base64,{{lugar.fotoUrl}}" alt="" width="400" height="300">
 </div>
